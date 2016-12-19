@@ -1,44 +1,33 @@
 #-*- coding: utf-8 -*-
 
-import scholarly
-import json
-
-import optparse
-
-import os
-import sys
-import re
-
-# print(next(scholarly.search_author('Steven A. Cholewiak')))
-
-# search_query = scholarly.search_pubs_query('Big data')
-
-
-file_name = 'large scale data mining'
-search_query = scholarly.search_pubs_query(file_name)
-
-
-
-with open(file_name + '.txt', 'a') as f:
-    for i in range(0, 200):
-        temp = next(search_query)
-
-        dict = temp.bib
-        json.dump(dict, f)
-        f.write('\n')
-
-f.close()
-
-print("it is done")
+import web_crawler
 
 
 
 
 
-# if __name__ == "__main__":
-#   print_query('Decision making')
+'''
+수집부분 output : temp_list 는 dictionary list 이고, {html(key): title(value)}로 구성 -> 다음 단계에서 html 기반으로 get single article 써써 긁어오기
+'''
+print("ready to craw the data")
+
+temp_list = web_crawler.spider()
+# print(temp_list)
+print("it is done 1")
 
 
+'''
+temp_list에서 get_single_article(html)로 text 긁어오기
+'''
+cfp_documents = ''
+for key, value in temp_list[0].items():
+    cfp_documents = web_crawler.get_single_article(key)
+
+print(cfp_documents)
+
+print("it is done 2")
 
 
-# get_financial_statements('035720')
+'''
+word2vec part
+'''
